@@ -268,6 +268,7 @@ abstract class SmoothRateLimiter extends RateLimiter {
   }
 
   /**
+   * 允许突发流量
    * This implements a "bursty" RateLimiter, where storedPermits are translated to zero throttling.
    * The maximum number of permits that can be saved (when the RateLimiter is unused) is defined in
    * terms of time, in this sense: if a RateLimiter is 2qps, and this time is specified as 10

@@ -39,11 +39,16 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
  * <p>{@code RateLimiter} is safe for concurrent use: It will restrict the total rate of calls from
  * all threads. Note, however, that it does not guarantee fairness.
  *
+ * ==> 但是不保证公平性
+ *
  * <p>Rate limiters are often used to restrict the rate at which some physical or logical resource
  * is accessed. This is in contrast to {@link java.util.concurrent.Semaphore} which restricts the
  * number of concurrent accesses instead of the rate (note though that concurrency and rate are
  * closely related, e.g. see <a href="http://en.wikipedia.org/wiki/Little%27s_law">Little's
  * Law</a>).
+ *
+ * (1) Semaphore 限制的是并发访问
+ * (2) RateLimiter 限制的是访问速率
  *
  * <p>A {@code RateLimiter} is defined primarily by the rate at which permits are issued. Absent
  * additional configuration, permits will be distributed at a fixed rate, defined in terms of
@@ -97,12 +102,16 @@ public abstract class RateLimiter {
    * Creates a {@code RateLimiter} with the specified stable throughput, given as "permits per
    * second" (commonly referred to as <i>QPS</i>, queries per second).
    *
+   * ==> QPS: queries per second
+   *
    * <p>The returned {@code RateLimiter} ensures that on average no more than {@code
    * permitsPerSecond} are issued during any given second, with sustained requests being smoothly
    * spread over each second. When the incoming request rate exceeds {@code permitsPerSecond} the
    * rate limiter will release one permit every {@code (1.0 / permitsPerSecond)} seconds. When the
    * rate limiter is unused, bursts of up to {@code permitsPerSecond} permits will be allowed, with
    * subsequent requests being smoothly limited at the stable rate of {@code permitsPerSecond}.
+   *
+   * ==> 允许瞬时流量
    *
    * @param permitsPerSecond the rate of the returned {@code RateLimiter}, measured in how many
    *     permits become available per second
